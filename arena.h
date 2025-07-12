@@ -1,7 +1,9 @@
 #ifndef ARENA_H_
 #define ARENA_H_
 
-#define MAX_ALIGN sizeof(long double)
+#include <quest/quest_common.h>
+
+#include <quest/quest_header.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -34,5 +36,7 @@ extern "C" {
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
+
+#include <quest/quest_footer.h>
 
 #endif /* ARENA_H_ */
