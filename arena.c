@@ -167,7 +167,7 @@ Arena *arena_create_subarena(Arena *parent, size_t capacity, const char *name) {
     if (0 == capacity) {
         ++capacity;
     }
-    Arena *subarena = (Arena *)arena_aligned_malloc(parent, sizeof(Arena), __alignof__(Arena));
+    Arena *subarena = (Arena *)arena_aligned_malloc(parent, sizeof(Arena), QUEST_ALIGNOF(Arena));
     if (NULL == subarena) {
         fprintf(stderr, "[arena_create_subarena]: Failed to malloc subarena\n");
         return NULL;
@@ -177,7 +177,7 @@ Arena *arena_create_subarena(Arena *parent, size_t capacity, const char *name) {
     subarena->debug_name = name ? name : "anonymous_subarena";
 #endif /* NDEBUG */
     
-    void *sub_base = arena_aligned_malloc(parent, capacity, __alignof__(MAX_ALIGN));
+    void *sub_base = arena_aligned_malloc(parent, capacity, QUEST_ALIGNOF(MAX_ALIGN));
     if (NULL == sub_base) {
         fprintf(stderr, "[arena_create_subarena]: Failed to malloc sub base\n");
         return NULL;
