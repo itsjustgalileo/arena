@@ -1,12 +1,8 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <stdint.h>
-#include <assert.h>
-#include <string.h>
 #include <stddef.h>
-#include <stdbool.h>
 
 #include "./arena.h"
+#include "../strings/quest_string.h"
 
 struct Arena {
     size_t capacity; /* Arena's total capacity */
@@ -72,7 +68,7 @@ void *arena_malloc(Arena *arena, size_t size) {
     void *ptr = (char *)arena->base + arena->used;
     arena->used += size;
 #ifndef NDEBUG
-    memset(ptr, 0xAD, size);
+    my_memset(ptr, 0xAD, size);
 #endif /* NDEBUG */
     
     return ptr;
@@ -103,7 +99,7 @@ void *arena_aligned_malloc(Arena *arena, size_t size, size_t alignment) {
 void arena_reset(Arena *arena) {
     assert(arena);
 #ifndef NDEBUG
-    memset(arena->base, 0xDE, arena->used);
+    my_memset(arena->base, 0xDE, arena->used);
 #endif /* NDEBUG */
     arena->used = 0;
     return;
@@ -177,7 +173,7 @@ Arena *arena_create_subarena(Arena *parent, size_t capacity, const char *name) {
     subarena->debug_name = name ? name : "anonymous_subarena";
 #endif /* NDEBUG */
     
-    void *sub_base = arena_aligned_malloc(parent, capacity, QUEST_ALIGNOF(MAX_ALIGN));
+    void *sub_base = arena_aligned_malloc(parent, capacity, QUEST_ALIGNOF(QUEST_MAX_ALIGN));
     if (NULL == sub_base) {
         fprintf(stderr, "[arena_create_subarena]: Failed to malloc sub base\n");
         return NULL;

@@ -8,7 +8,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
-
+    
     typedef struct Arena Arena;
     typedef size_t ArenaMarker;
 
