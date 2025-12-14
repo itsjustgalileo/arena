@@ -1,14 +1,6 @@
 #ifndef ARENA_H_
 #define ARENA_H_
 
-#include <quest/quest_common.h>
-
-#include <quest/quest_header.h>
-
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-    
     typedef struct Arena Arena;
     typedef size_t ArenaMarker;
 
@@ -32,11 +24,5 @@ extern "C" {
     void arena_rewind(Arena *arena, ArenaMarker marker);
 
     Arena *arena_create_subarena(Arena *parent, size_t capacity, const char *name);
-
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
-#include <quest/quest_footer.h>
 
 #endif /* ARENA_H_ */
