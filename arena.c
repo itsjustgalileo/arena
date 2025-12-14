@@ -1,8 +1,12 @@
 #include <stdio.h>
 #include <stddef.h>
+#include <string.h>
 
 #include "./arena.h"
-#include "../strings/quest_string.h"
+
+#define MAX_ARENA_COUNT 256
+
+static unsigned int arena_count;
 
 struct Arena {
     size_t capacity; /* Arena's total capacity */
@@ -10,7 +14,7 @@ struct Arena {
     void *base; /* Arena's starting point */
     bool is_sub; /* Helps with free */
 #ifndef NDEBUG
-    const char *debug_name;
+    const char debug_name[256]; /* if we want to easily track them */
 #endif /* NDEBUG */
 };
 
@@ -25,7 +29,11 @@ Arena *arena_init(size_t capacity, const char *name) {
     arena->capacity = capacity;
     arena->used = 0;
 #ifndef NDEBUG
-    arena->debug_name = name ? name : "unnamed_arena";
+    if (name) {        
+        arena->debug_name = name;
+    } else {
+        snprintf(arena->debug_name, sizeof("unnamed_arenaXXX"), "%s%03d", "unnamed_arena", arena_count++);        
+    }
 #endif
     
     arena->base = malloc(capacity);
@@ -68,7 +76,7 @@ void *arena_malloc(Arena *arena, size_t size) {
     void *ptr = (char *)arena->base + arena->used;
     arena->used += size;
 #ifndef NDEBUG
-    my_memset(ptr, 0xAD, size);
+    memset(ptr, 0xAD, size);
 #endif /* NDEBUG */
     
     return ptr;
@@ -163,7 +171,8 @@ Arena *arena_create_subarena(Arena *parent, size_t capacity, const char *name) {
     if (0 == capacity) {
         ++capacity;
     }
-    Arena *subarena = (Arena *)arena_aligned_malloc(parent, sizeof(Arena), QUEST_ALIGNOF(Arena));
+    // using _Alignof is not optimal. Maybe we should create cross-platform macro.
+    Arena *subarena = (Arena *)arena_aligned_malloc(parent, sizeof(Arena), _Alignof(Arena));
     if (NULL == subarena) {
         fprintf(stderr, "[arena_create_subarena]: Failed to malloc subarena\n");
         return NULL;
@@ -173,7 +182,7 @@ Arena *arena_create_subarena(Arena *parent, size_t capacity, const char *name) {
     subarena->debug_name = name ? name : "anonymous_subarena";
 #endif /* NDEBUG */
     
-    void *sub_base = arena_aligned_malloc(parent, capacity, QUEST_ALIGNOF(QUEST_MAX_ALIGN));
+    void *sub_base = arena_aligned_malloc(parent, capacity, _Alignof(max_align_t));
     if (NULL == sub_base) {
         fprintf(stderr, "[arena_create_subarena]: Failed to malloc sub base\n");
         return NULL;
