@@ -113,22 +113,19 @@ void arena_reset(Arena *arena) {
     return;
 }
 
-int arena_get_size(Arena *arena, size_t *size) {
-    assert(arena && size);
-    *size = arena->used;
-    return 0;
+size_t arena_get_size(const Arena *arena) {
+    assert(arena);
+    return arena->used;
 }
 
-int arena_get_available(Arena *arena, size_t *size) {
-    assert(arena && size);
-    *size = arena->capacity - arena->used;
-    return 0;
+size_t arena_get_available(const Arena *arena) {
+    assert(arena);
+    return arena->capacity - arena->used;
 }
 
-int arena_get_capacity(Arena *arena, size_t *capacity) {
-    assert(arena && capacity);
-    *capacity = arena->capacity;
-    return 0;
+size_t arena_get_capacity(const Arena *arena) {
+    assert(arena);
+    return arena->capacity;
 }
 #ifndef NDEBUG
 const char *arena_get_name(Arena *arena) {
@@ -145,18 +142,17 @@ void arena_print(Arena *arena) {
 }
 #endif /* NDEBUG */
 
-int arena_top(Arena *arena, void **top) {
+void *arena_top(const Arena *arena) {
     assert(arena && top);
-    *top = (char *)arena->base + arena->used;
-    return 0;
+    return (char *)arena->base + arena->used;
 }
 
-ArenaMarker arena_mark(Arena *arena) {
+ArenaMarker arena_mark(const Arena *arena) {
     assert(arena);
     return arena->used;
 }
 
-void arena_rewind(Arena *arena, ArenaMarker marker) {
+void arena_rewind(Arena *arena, const ArenaMarker marker) {
     assert(arena);
     if (marker > arena->used || marker > arena->capacity) {
         fprintf(stderr, "[arena_rewind]: Invalid rewind marker: out of bounds\n");
