@@ -22,9 +22,9 @@ const char *arena_get_name(const Arena *arena);
 void arena_print(const Arena *arena);
 #endif /* NDEBUG */
     
-ArenaMarker arena_mark(Arena *arena);
-void arena_rewind(Arena *arena, ArenaMarker marker);
+ArenaMarker arena_mark(const Arena *arena);
+void arena_rewind(Arena *arena, const ArenaMarker marker);
 
-Arena *arena_create_subarena(Arena *parent, size_t capacity, const char *name);
+Arena *arena_create_subarena(const Arena *parent, size_t capacity, const char *name);
 
 #endif /* ARENA_H_ */
