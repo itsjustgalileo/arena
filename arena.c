@@ -162,7 +162,7 @@ void arena_rewind(Arena *arena, const ArenaMarker marker) {
     return;
 }
 
-Arena *arena_create_subarena(Arena *parent, size_t capacity, const char *name) {
+Arena *arena_create_subarena(const Arena *parent, size_t capacity, const char *name) {
     assert(parent);
     if (0 == capacity) {
         ++capacity;
