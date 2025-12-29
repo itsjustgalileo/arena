@@ -24,7 +24,7 @@ struct Arena {
 #endif /* NDEBUG */
 };
 
-Arena *arena_init(size_t capacity, const char *name) {
+Arena *arena_create(size_t capacity, const char *name) {
     assert(arena_count <= MAX_ARENA_COUNT);
     assert(strlen(name) + 1 <= 256 && "Arena's name is too long");
 
@@ -69,10 +69,10 @@ Arena *arena_init(size_t capacity, const char *name) {
  * Do not call this on subarenas created via arena_create_subarena.
  * Use arena_rewind() or arena_reset() on the parent instead.
  */
-void arena_free(Arena *arena) {
+void arena_destroy(Arena *arena) {
     assert(arena);
     if (arena->is_sub) {
-        fprintf(stderr, "[arena_free]: Did you mean to call arena_rewind or arena_reset instead?\nLet's not continue, just for safety\n");
+        fprintf(stderr, "[arena_destroy]: Did you mean to call arena_rewind or arena_reset instead?\nLet's not continue, just for safety\n");
         return;
     }
     free(arena->base);

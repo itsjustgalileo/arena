@@ -37,14 +37,14 @@ extern "C" {
      *
      * @return A pointer to the arena object if success, or NULL if failure.
      */
-    extern Arena *arena_init(size_t capacity, const char *name);
+    extern Arena *arena_create(size_t capacity, const char *name);
 
     /**
      * @brief Frees an entire arena. Never call this on a subarena.
      *
      * @param arena A pointer to the arena to free.
      */
-    extern void arena_free(Arena *arena);
+    extern void arena_destroy(Arena *arena);
 
     /**
      * @brief Rewinds an arena back to the base. This does not free
