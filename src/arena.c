@@ -7,7 +7,7 @@
 #include <arena/arena.h>
 
 #define MAX_ARENA_COUNT 256
-#define MAX_SUBARENA_COUNT (MAX_ARENA_COUNT / 2)
+#define MAX_SUBARENA_COUNT (MAX_ARENA_COUNT >> 1)
 
 static unsigned int arena_count;
 static unsigned int subarena_count;
@@ -233,6 +233,10 @@ Arena *arena_create_subarena(Arena *parent, size_t capacity, const char *name)
         assert(strlen(name) + 1 <= 256 && "Subarena's name is too long");
     }
 #endif /* !NDEBUG */
+
+    if (capacity == 0) {
+        ++capacity
+    }
 
     // Keeping this to rollback if we fail to allocate the subarena's base
     ArenaMarker rollback = arena_mark(parent);

@@ -1,7 +1,7 @@
 /**
  * @file arena.h
  * @author itsjustgalileo
- * @version 1.2
+ * @version 2.1.1
  * @brief Basic bump allocator in C.
  */
 #ifndef ARENA_H_
@@ -32,7 +32,8 @@ extern "C" {
      *
      * If capacity == 0, a minimum allocation of 1 byte is performed.
      *
-     * @param capacity The size of the chunk of memory to allocate for the entire pool.
+     * @param capacity The size of the chunk of memory to allocate for the
+     * entire pool.
      * @param name (optional) A name for easier debug tracking.
      *
      * @return A pointer to the arena object if success, or NULL if failure.
@@ -63,7 +64,7 @@ extern "C" {
      *
      * @param arena The arena pool in which to allocate.
      * @param size The size of the desired memory chunk.
-     * 
+     *
      * @return A pointer to the allocated memory chunk.
      */
     extern void *arena_malloc(Arena *arena, size_t size);
@@ -77,11 +78,13 @@ extern "C" {
      *
      * @param arena A pointer to the arena in which to allocate.
      * @param size The size of the desired memory chunk.
-     * @param alignment The size of memory alignment. Must be > 0 and a power of 2.
+     * @param alignment The size of memory alignment. Must be > 0 and a power
+     * of 2.
      *
      * @return A pointer to the allocated memory chunk.
      */
-    extern void *arena_aligned_malloc(Arena *arena, size_t size, size_t alignment);
+    extern void *arena_aligned_malloc(Arena *arena, size_t size,
+                                      size_t alignment);
 
     /**
      * @brief Get the size of allocated memory in a given arena.
@@ -100,7 +103,7 @@ extern "C" {
      * @return The available size in the arena.
      */
     extern size_t arena_get_available(const Arena *arena);
-    
+
     /**
      * @brief Get the total capacity of a given arena.
      *
@@ -151,9 +154,11 @@ extern "C" {
     extern void arena_rewind(Arena *arena, const ArenaMarker marker);
 
     /**
-     * @brief Creates a secondary arena that branches off of an already existing one.
+     * @brief Creates a secondary arena that branches off of an already existing
+     * one.
      *
-     * Subarenas do not own memory and are invalidated if the parent is rewound past their creation point.
+     * Subarenas do not own memory and are invalidated if the parent is rewound
+     * past their creation point.
      *
      * If capacity == 0, a minimum bump of one byte is performed.
      *
@@ -161,7 +166,8 @@ extern "C" {
      * @param capacity The total size of the arena.
      * @param name (optional) debug name.
      */
-    extern Arena *arena_create_subarena(Arena *parent, size_t capacity, const char *name);
+    extern Arena *arena_create_subarena(Arena *parent, size_t capacity,
+                                        const char *name);
 
 /* Ends C function definitions when using C++ */
 #ifdef __cplusplus
