@@ -278,3 +278,9 @@ Arena *arena_create_subarena(Arena *parent, size_t capacity, const char *name)
 
     return subarena;
 }
+
+ArenaResult arena_try_create(size_t capacity, const char *name,
+                             Arena **out_arena)
+{
+    return ARENA_NO_ERRORS;
+}

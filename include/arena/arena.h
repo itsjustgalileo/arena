@@ -28,6 +28,22 @@ extern "C" {
     typedef size_t ArenaMarker;
 
     /**
+     * @brief Non asserting arena results
+     */
+    typedef enum ArenaResult {
+        ARENA_NO_ERRORS = 0x00,
+        ARENA_ERROR_INVALID_ARGUMENT,
+        ARENA_ERROR_CAPACITY_EXCEEDED,
+        ARENA_ERROR_ALIGNMENT_INVALID,
+        ARENA_ERROR_NAME_TOO_LONG,
+        ARENA_ERROR_ARENA_LIMIT_REACHED,
+        ARENA_ERROR_SUBARENA_LIMIT_REACHED,
+        ARENA_ERROR_ALLOCATION_FAILED,
+        ARENA_ERROR_INVALID_MARKED,
+        ARENA_ERROR_SENTINELLE,
+    } ArenaResult;
+
+    /**
      * @brief Creates an arena with a given non-zero capacity.
      *
      * If capacity == 0, a minimum allocation of 1 byte is performed.
@@ -168,6 +184,37 @@ extern "C" {
      */
     extern Arena *arena_create_subarena(Arena *parent, size_t capacity,
                                         const char *name);
+
+    /**
+     * @brief Non-asserting arena creation API.
+     */
+    extern ArenaResult arena_try_create(size_t capacity, const char *name,
+                                        Arena **out_arena);
+
+    /**
+     * @brief Non-asserting allocation API using max_align_t alignment.
+     */
+    extern ArenaResult arena_try_malloc(Arena *arena, size_t size,
+                                        void **out_ptr);
+
+    /**
+     * @brief Non-asserting aligned allocation API.
+     */
+    extern ArenaResult arena_try_aligned_malloc(Arena *arena, size_t size,
+                                                size_t alignment,
+                                                void **out_ptr);
+
+    /**
+     * @brief Non-asserting rewind API.
+     */
+    extern ArenaResult arena_try_rewind(Arena *arena, ArenaMarker marker);
+
+    /**
+     * @brief Non-asserting subarena creation API.
+     */
+    extern ArenaResult arena_try_create_subarena(Arena *parent, size_t capacity,
+                                                 const char *name,
+                                                 Arena **out_subarena);
 
 /* Ends C function definitions when using C++ */
 #ifdef __cplusplus
